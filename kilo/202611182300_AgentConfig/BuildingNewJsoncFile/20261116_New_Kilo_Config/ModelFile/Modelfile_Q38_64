@@ -1,0 +1,5 @@
+# G:\ModelFiles\Modelfile_Q38_64
+FROM qwen3.8:27b
+
+# Specify 64K context window
+PARAMETER num_ctx 65536

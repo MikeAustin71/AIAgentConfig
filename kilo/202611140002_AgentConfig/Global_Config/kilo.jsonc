@@ -1,0 +1,31 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "provider": {
+    "ollama": {
+      "name": "Ollama Local",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen38-dev:32kb": {
+          "id": "qwen38-dev:32kb",
+          "name": "qwen38-dev:32kb"
+        }
+      }
+    }
+  },
+  "agent": {
+    "debug": {
+    },
+    "ask": {
+    },
+    "code": {
+    },
+    "plan": {
+    }
+  },
+  "compaction": {
+    "auto": true
+  }
+}
