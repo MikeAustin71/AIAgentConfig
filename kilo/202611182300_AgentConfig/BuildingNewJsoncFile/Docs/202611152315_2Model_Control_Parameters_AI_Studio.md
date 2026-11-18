@@ -1,6 +1,6 @@
 # 2026-11-15 23:15-Hours Model Control Parameters - AI Studio
 
-
+[Reference Info Directory](D:\Programming\ArtificialIntelligence\Agents\Kilo\Agents_Control\ModelControl_Parameters\202611152143_Model_Control_Parameters)
 
 # Gemini Hydrogen Question No. 1 Model Control Parameters - 2026-11-15 23:16-Hours
 
@@ -214,6 +214,8 @@ Do **not** place `variant`, `temperature`, `top_p`, or `steps` at the top root l
 
 
 # Gemini Hydrogen Question No. 2 Qwen 64kb Context - 2026-11-15 23:36-Hours
+
+
 
 ## Background
 
