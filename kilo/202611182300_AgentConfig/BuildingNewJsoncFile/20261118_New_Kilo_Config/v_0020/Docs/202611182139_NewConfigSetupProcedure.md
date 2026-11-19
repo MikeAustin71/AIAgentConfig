@@ -71,14 +71,11 @@ Check two columns:
 * Keep `qwen38-dev2:64kb` for heavy agentic coding (`code` / `plan`) where Kilo reads multiple files and needs room before compaction.
 * Keep `qwen38-dev:32kb` as Jose's snappy backup for games, Docker/WSL, or heavy GPU apps open alongside JetBrains.
 
-#### Step 7: Update **`kilo.jsonc`**
+#### Step 7: Update Local Project **`kilo.jsonc`**
 
-Make sure your `kilo.jsonc` entry for `qwen38-dev2:64kb` sets `"limit": { "context": 65536, "output": 16384 }` so Kilo knows it has the full 64K runway before auto-compacting. *(And keep `variant: "medium"` or `"low"`—because Qwen 3.8's thinking tokens eat from that same 64K budget.)*
-
-```json
-# TO BE DETERMINED TBD
-```
+Make sure your `kilo.jsonc` entry for `qwen38-dev2:64kb` sets `"limit": { "context": 65536, "output": 16384 }` so Kilo knows it has the full 64K runway before auto-compacting. *(And keep `variant: "medium"` or `"low"`—because Qwen 3.8's thinking tokens eat from that same 64K budget.)
 
 
 
-## 
+#### Step 8: Update Global **`kilo.jsonc`**
+
