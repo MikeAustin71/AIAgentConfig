@@ -1,0 +1,84 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+
+  // Default main model
+  "model": "ollama/qwen38-dev:64kb",
+
+  // Reuse the already-loaded model for titles/commits (zero VRAM swap, zero cloud fallback)
+  "small_model": "ollama/qwen38-dev:64kb",
+
+  "provider": {
+    "ollama": {
+      "options": {
+        "baseURL": "http://localhost:11434/v1",
+        "timeout": false
+      },
+      "models": {
+        "gemma4:31b": {
+          "id": "gemma4:31b",
+          "name": "gemma4 31b Orig",
+          "tool_call": true,
+          "reasoning": true,
+          "limit": {
+            "context": 32768,
+            "output": 16384
+          }
+        },
+        "qwen38-dev:64kb": {
+          "id": "qwen38-dev:64kb",
+          "name": "Qwen 3.8 27B Dev (64K)",
+          "tool_call": true,
+          "reasoning": true,
+          "limit": {
+            "context": 65536,
+            "output": 16384
+          },
+          "variants": {
+            "none":   { "reasoningEffort": "none" },
+            "low":    { "reasoningEffort": "low" },
+            "medium": { "reasoningEffort": "medium" },
+            "xhigh":  { "reasoningEffort": "xhigh" }
+          }
+        },
+        "qwen38-dev:32kb": {
+          "id": "qwen38-dev:32kb",
+          "name": "Qwen 3.8 27B Dev (32K)",
+          "tool_call": true,
+          "reasoning": true,
+          "limit": {
+            "context": 32768,
+            "output": 16384
+          },
+          "variants": {
+            "none":   { "reasoningEffort": "none" },
+            "low":    { "reasoningEffort": "low" },
+            "medium": { "reasoningEffort": "medium" },
+            "xhigh":  { "reasoningEffort": "xhigh" }
+          }
+        }
+      }
+    }
+  },
+  "agent": {
+    "code": {
+      "model": "ollama/qwen38-dev:64kb",
+      "variant": "medium",
+      "temperature": 0.7,
+      "top_p": 0.95,
+      "steps": 30
+    },
+    "plan": {
+      "variant": "medium",
+      "temperature": 0.6,
+      "top_p": 0.95,
+      "steps": 20
+    },
+    "compaction": {
+      // Inherits whichever model is currently loaded in VRAM (64K or 32K)
+      "variant": "none",
+      "temperature": 0.2,
+      "top_p": 0.9,
+      "steps": 3
+    }
+  }
+}
