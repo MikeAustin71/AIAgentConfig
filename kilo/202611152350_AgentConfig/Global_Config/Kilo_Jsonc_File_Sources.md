@@ -8,7 +8,7 @@
 
 ## Local Configuration File Source
 
-### D:\GoProjects\MikeAustin71\floatmechops\\.kilo\kilo.jsonc
+### ...\MikeAustin71\floatmechops\\.kilo\kilo.jsonc
 
 
 
