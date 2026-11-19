@@ -1,6 +1,6 @@
 
 
-# New Kilo Configuration Setup Procedure 2026-11-17 17:01-Hours
+# New Kilo Configuration Setup Procedure 2026-11-18 22:00-Hours
 
 
 
@@ -13,7 +13,7 @@ OLLAMA_FLASH_ATTENTION=1
 OLLAMA_KV_CACHE_TYPE=q8_0
 ```
 
-#### Step 2: ***Fully Quit*** and Restart ***Ollama***
+#### Step 2: ***Fully Quit*** and Restart ***Ollama*** - Completed 2026-11-17 23:00-Hours
 
 #### Step 3: Create Model File Configuration for `qwen38-dev:64kb` Derivation
 
@@ -35,6 +35,9 @@ PARAMETER num_ctx 65536
 ##### Execute Model File Creation Commands
 
 ```bash
+# Pull Latest qwen3.8:27b Model Derivative Command
+ollama pull qwen3.8:27b
+
 # Create Model Derivative Command
 ollama create qwen38-dev2:64kb -f G:\ModelFiles\Modelfile_Q38_64
 
