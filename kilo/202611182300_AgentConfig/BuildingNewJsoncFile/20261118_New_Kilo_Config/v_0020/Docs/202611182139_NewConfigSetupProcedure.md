@@ -39,7 +39,7 @@ PARAMETER num_ctx 65536
 ollama pull qwen3.8:27b
 
 # Create Model Derivative Command
-ollama create qwen38-dev2:64kb -f G:\ModelFiles\Modelfile_Q38_64
+ollama create qwen38-dev:64kb -f G:\ModelFiles\Modelfile_Q38_64
 
 # Run Command
 ollama run qwen38-dev2:64kb
