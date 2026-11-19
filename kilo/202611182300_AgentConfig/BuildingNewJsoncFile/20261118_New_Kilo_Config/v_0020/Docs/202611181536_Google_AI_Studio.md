@@ -566,21 +566,292 @@ Under your current configuration, **auto-compaction is fully active** and will a
 
 
 
-Google AI Studio - Question No: 3
-
-Google AI Studio - Response No: 3
+# Google Gemini 3.8 Flash - Question No: 3  - 2026-11-18 21:12-Hours
 
 
 
-Google AI Studio - Question No: 4
+## Background
 
-Google AI Studio - Response No: 4
+### ***`AGENTS.md`*** File
+
+The current version of my ***`Agents.md`*** file is shown as follows:
+
+```markdown
+<!-- AGENTS.md at project root -->
+# Go v1.27 Development Standards
+
+- **Context Grounding**: All generated Go code must strictly adhere to Golang Version 1.27 features, idioms, and standard library conventions.
+- **Knowledge Retrieval (Active Search)**: If you are unsure about Go 1.27 specific syntax, or before writing/refactoring complex logic, you must actively query the local knowledge base using your file search or shell tools:
+- For incremental feature updates or version differences, search the `F:/Go_Knowledge/releases/` directory.
+- For core language mechanics, read the `F:/Go_Knowledge/language-spec.md/language-spec.md` file.
+- **Strict Compliance**: Reject and avoid any deprecated Go functions or patterns outlined as obsolete in the local documentation.
+- **Tooling First**: Do not guess version-specific behaviors. Rely on reading the specified knowledge paths to guarantee factual accuracy before outputting code.
+
+```
 
 
 
-Google AI Studio - Question No: 5
+### ***`kilo.jsonc`*** File
 
-Google AI Studio - Response No: 5
+The current version of my proposed ***kilo*** configuration file (***`kilo.jsonc`***) is shown as follows:
+
+```json
+{
+  "$schema": "https://app.kilo.ai/config.json",
+
+  // 1. External knowledge base reference
+  "references": {
+    "go_knowledge": {
+      "path": "F:/Go_Knowledge",
+      "description": "Central Go 1.27 documentation and release specifications",
+      "hidden": false
+    }
+  },
+
+  // 2. Project rules (AGENTS.md is omitted as Kilo auto-discovers it at root)
+  "instructions": [
+    ".kilo/rules/*.md"
+  ],
+
+  // Default main model
+  "model": "ollama/qwen38-dev:64kb",
+
+  // Reuse loaded model for small tasks to prevent VRAM swapping
+  "small_model": "ollama/qwen38-dev:64kb",
+
+  "provider": {
+    "ollama": {
+      "name": "Ollama Local",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://localhost:11434/v1",
+        "timeout": false
+      },
+      "models": {
+        "gemma4:31b": {
+          "id": "gemma4:31b",
+          "name": "Gemma 4 31B",
+          "tool_call": true,
+          "reasoning": true,
+          "limit": {
+            "context": 32768,
+            "output": 16384
+          },
+          "variants": {
+            "none":   { "reasoningEffort": "none" },
+            "low":    { "reasoningEffort": "low" },
+            "medium": { "reasoningEffort": "medium" },
+            "high":   { "reasoningEffort": "high" }
+          }
+        },
+        "qwen38-dev:64kb": {
+          "id": "qwen38-dev:64kb",
+          "name": "Qwen 3.8 27B Dev (64K)",
+          "tool_call": true,
+          "reasoning": true,
+          "limit": {
+            "context": 65536,
+            "output": 16384
+          },
+          "variants": {
+            "none":   { "reasoningEffort": "none" },
+            "low":    { "reasoningEffort": "low" },
+            "medium": { "reasoningEffort": "medium" },
+            "high":   { "reasoningEffort": "high" },
+            "xhigh":  { "reasoningEffort": "xhigh" }
+          }
+        },
+        "qwen38-dev:32kb": {
+          "id": "qwen38-dev:32kb",
+          "name": "Qwen 3.8 27B Dev (32K)",
+          "tool_call": true,
+          "reasoning": true,
+          "limit": {
+            "context": 32768,
+            "output": 16384
+          },
+          "variants": {
+            "none":   { "reasoningEffort": "none" },
+            "low":    { "reasoningEffort": "low" },
+            "medium": { "reasoningEffort": "medium" },
+            "high":   { "reasoningEffort": "high" },
+            "xhigh":  { "reasoningEffort": "xhigh" }
+          }
+        }
+      }
+    }
+  },
+
+  "agent": {
+    "code": {
+      "model": "ollama/qwen38-dev:64kb",
+      "variant": "medium",
+      "temperature": 0.5,
+      "top_p": 0.95,
+      "steps": 30
+    },
+    "plan": {
+      "variant": "medium",
+      "temperature": 0.4,
+      "top_p": 0.95,
+      "steps": 20
+    },
+    "compaction": {
+      // Fast summarization without reasoning overhead
+      "variant": "none",
+      "temperature": 0.2,
+      "top_p": 0.9,
+      "steps": 3
+    }
+  },
+
+  "permission": {
+    // Crucial for allowing tool access to the external knowledge base
+    "external_directory": {
+      "F:/Go_Knowledge/**": "allow",
+      "*": "ask"
+    },
+    "read": {
+      "*": "allow",
+      "F:/Go_Knowledge/**": "allow",
+      "*.env": "ask",
+      "*.env.*": "ask",
+      "*.env.example": "allow",
+      "**/.idea/**": "deny",
+      ".idea/**": "deny"
+    },
+    "edit": "allow",
+    "bash": {
+      "*": "ask",
+      "cd *": "allow",
+      "grep *": "allow",
+      "git status *": "allow",
+      "git diff *": "allow"
+    },
+    "glob": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "todowrite": "allow",
+    "todoread": "allow",
+    "lsp": "allow",
+    "skill": "allow",
+    "webfetch": "ask",
+    "websearch": "ask",
+    "task": "ask"
+  }
+}
+```
+
+## Question
+
+My ***kilo*** configuration file (***`kilo.jsonc`***) includes an ***instructions*** property. 
+
+```json
+  // 2. Project rules (AGENTS.md is omitted as Kilo auto-discovers it at root)
+  "instructions": [
+    ".kilo/rules/*.md"
+  ],
+```
+
+However, I also have a ***skills*** directory at ***`.kilo/skills/*.md`***. Do I need to include a separate specification for the ***skills*** directory in my configuration?
+
+
+
+
+
+# Google Gemini 3.8 Flash - Response No: 3 - 2026-11-18 21:14-Hours
+
+**No**, you do **not** need to specify the `.kilo/skills/` directory in your `kilo.jsonc` file. 
+
+However, there is an important detail regarding **how skill files must be structured** on disk for Kilo to discover them.
+
+---
+
+### 1. Automatic Discovery of `.kilo/skills/`
+
+Kilo Code implements the open **Agent Skills** standard and automatically scans standard directory locations at startup without any configuration entries:
+
+* **Project level (automatic):** `.kilo/skills/` (and compatibility folders like `.agents/skills/` or `.claude/skills/`)
+* **Global level (automatic):** `~/.kilo/skills/`
+
+The `"skills"` block in `kilo.jsonc` (specifically `"skills": { "paths": [...] }`) is **only required** if you store skills in non-standard locations (such as a shared network drive or an arbitrary path outside `.kilo/skills/`). 
+
+Furthermore, your configuration already includes `"skill": "allow"` under `"permission"`, so the agent has full permission to invoke skills when needed.
+
+---
+
+### 2. Important: Directory Structure of Skills
+
+You mentioned having files at:
+```text
+.kilo/skills/*.md
+```
+
+If these are loose Markdown files sitting directly in the `.kilo/skills/` folder, **Kilo will not recognize them as skills**. 
+
+Under the Agent Skills specification, **each skill must reside in its own subfolder and be named `SKILL.md`**:
+
+```text
+.kilo/
+└── skills/
+    ├── go-benchmarking/
+    │   └── SKILL.md
+    ├── go-migration/
+    │   └── SKILL.md
+    └── go-concurrency-patterns/
+        └── SKILL.md
+```
+
+Each `SKILL.md` file must start with YAML frontmatter containing at least a `name` and a `description`:
+
+```markdown
+---
+name: go-benchmarking
+description: Use this skill when profiling, benchmarking, or optimizing Go routines and memory allocations.
+---
+
+# Go Benchmarking Guidelines
+...
+```
+
+---
+
+### 3. How Skills Differ From `instructions` (and why this helps your local LLM)
+
+Understanding the difference between `instructions` and `skills` is especially important when using local models with bounded context windows (32k / 64k):
+
+| Feature             | `instructions` (`.kilo/rules/*.md`)                          | `skills` (`.kilo/skills/<name>/SKILL.md`)                    |
+| :------------------ | :----------------------------------------------------------- | :----------------------------------------------------------- |
+| **How It's Loaded** | Injected **in full** into the system prompt for *every single interaction*. | Loaded **on demand**. Only `name` and `description` are loaded into prompt metadata. |
+| **Context Impact**  | Permanently consumes tokens on every turn.                   | Consumes almost zero context until the agent actually needs to perform that specific task. |
+| **Best Used For**   | Non-negotiable global conventions (formatting rules, naming conventions, error handling). | Specialized, task-specific workflows (e.g., generating mock data, running database migrations, profiling). |
+
+### Summary Action Item
+
+1. **Leave `kilo.jsonc` as is** — no `skills` property needs to be added.
+2. **Check your folder structure** — make sure your files are placed in `.kilo/skills/<skill-name>/SKILL.md` with YAML frontmatter (`name` and `description`) so Kilo can automatically index and load them on demand.
+
+
+
+## Sources
+
+1. [kilo.ai - Skills](https://www.google.com/url?sa=E&q=https%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQHBNokxWlzJVOKjHgYfqyBm0bgMQp1hqvdFKBxLqm0K2t3OYevNmK_Kln2jO5xbwRxvBFfGh-572qfm8X5qO4sIDO8SiEy-SgQwQbEyWkcBRPzUu_7pM1VWXdE%3D)
+2. [kilo.ai - Skills](https://www.google.com/url?sa=E&q=https%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQHBNokxWlzJVOKjHgYfqyBm0bgMQp1hqvdFKBxLqm0K2t3OYevNmK_Kln2jO5xbwRxvBFfGh-572qfm8X5qO4sIDO8SiEy-SgQwQbEyWkcBRPzUu_7pM1VWXdE%3D)
+3. [github.com - Skills Documentation](https://www.google.com/url?sa=E&q=https%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEgsnVuycGQkHUkrRIOOtXNRfaJEYCdaJlfrul_qIxl1B-YTSxdIcHgY-qhgjkVyY_yl_w6yEuDvUxheICFlEOUK92X7LDPaFUzjyQjthavT0qVfBvNLk9kGcOr0inq7Z-STjQayUuadyk6iw%3D%3D)
+4. [kilo.ai - Skills](https://www.google.com/url?sa=E&q=https%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQHBNokxWlzJVOKjHgYfqyBm0bgMQp1hqvdFKBxLqm0K2t3OYevNmK_Kln2jO5xbwRxvBFfGh-572qfm8X5qO4sIDO8SiEy-SgQwQbEyWkcBRPzUu_7pM1VWXdE%3D)
+5. [kilo.ai - Skills](https://www.google.com/url?sa=E&q=https%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQGkZwZB_UYTHAHirNWSv2tdX-EE2pH2ZhEvbD3USOgZUdmixOQ-3mY6MyxAcNVFxrqABq0iewtU-uUep1EDI7mScRtIBx39DOPKqIQugILybBlhFjOpJp5sHWpctKw1qKo%3D)
+
+
+
+Google Gemini 3.8 Flash - Question No: 4
+
+Google Gemini 3.8 Flash - Response No: 4
+
+
+
+Google Gemini 3.8 Flash - Question No: 5
+
+Google Gemini 3.8 Flash - Response No: 5
 
 
 
