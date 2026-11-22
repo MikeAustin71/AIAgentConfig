@@ -8,42 +8,6 @@
 
 # Session Title: Go Documentation RAG
 
-## My Local Configuration
-
-### AI Hardware Configuration
-
-- **CPU: AMD Ryzen 9 9950X** 
-- **RAM: 192GB DDR5 RAM - (4x48GB) 3600MT/s**
-- **GPU: Sapphire Pulse AMD Radeon RX-7900XTX - 24GB VRAM**
-
-### Operating System
-
-- **Edition	Windows 11 Pro**
-- **Version	25H2**
-
-### Key Software Applications
-
-- **WSL2**
-- **JetBrains Editors** 
-- **Zed Editor**
-
-### Programming Language
-
-***Go (a.k.a. Golang)*** 
-
-### AI Software
-
-**Ollama Version: *0.40.17* Running Local LLM Models**
-
-**Agent: *Kilo* (Integrated in JetBrains Editors)**
-
-### Local LLM's
-
-***qwen3.8-27b*: Model Derivatives with 32kb and 64kb contexts.**
-
-***gemma4:31b***: Model Derivatives with 32kb and 64kb contexts.
-
-
 
 ## Background
 
