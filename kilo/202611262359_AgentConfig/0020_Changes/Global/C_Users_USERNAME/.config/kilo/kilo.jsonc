@@ -2,13 +2,14 @@
   "$schema": "https://app.kilo.ai/config.json",
 
   "permission": {
-    // 1. Block all external directory access except read-only Go docs
+    // 2. Block all external directory access except read-only Go docs
     "external_directory": {
       "*": "ask",
       "F:/Go_Knowledge/**": "allow"
     },
 
-    // 2. Allow reading project files and Go docs; protect secrets & JetBrains metadata
+
+    // 3. Allow reading project files and Go docs; protect secrets & JetBrains metadata
     "read": {
       "*": "allow",
       "F:/Go_Knowledge/**": "allow",
@@ -19,7 +20,7 @@
       ".idea/**": "deny"
     },
 
-    // 3. Allow file edits inside the workspace ONLY (external edits still trigger external_directory: "ask")
+    // 4. Allow file edits inside the workspace ONLY (external edits still trigger external_directory: "ask")
     "edit": {
       "*": "allow",
       "F:/Go_Knowledge/**": "deny",
@@ -27,7 +28,7 @@
       ".idea/**": "deny"
     },
 
-    // 4. Granular Go & Git command allowlist (prevents repetitive prompts without unrestricted shell access)
+    // 5. Granular Go & Git command allowlist (prevents repetitive prompts without unrestricted shell access)
     "bash": {
       "*": "ask",
       "git status*": "allow",
@@ -45,7 +46,7 @@
       "go mod verify": "allow"
     },
 
-    // 5. Safe local inspection & skill tools
+    // 6. Safe local inspection & skill tools
     "glob": "allow",
     "grep": "allow",
     "list": "allow",
@@ -54,7 +55,7 @@
     "todowrite": "allow",
     "todoread": "allow",
 
-    // 6. Keep network & subagent spawning gated
+    // 7. Keep network & subagent spawning gated
     "webfetch": "deny",
     "websearch": "deny",
     "task": "ask"

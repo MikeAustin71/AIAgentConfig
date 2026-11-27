@@ -1,26 +1,18 @@
 {
   "$schema": "https://app.kilo.ai/config.json",
 
-  // 1. External knowledge base reference
-  "references": {
-    "go_knowledge": {
-      "path": "F:/Go_Knowledge",
-      "description": "Central Go 1.27 documentation, release specifications and math packages documentation",
-      "hidden": false
-    }
-  },
-
-  // 2. Project rules (AGENTS.md is omitted as Kilo auto-discovers it at root)
+  // 1. Project rules (AGENTS.md is omitted as Kilo auto-discovers it at root)
   "instructions": [
     ".kilo/rules/*.md"
   ],
 
-  // Default main model
+  // 2. Default main model
   "model": "ollama/qwen38-dev:64kb",
 
-  // Reuse loaded model for small tasks to prevent VRAM swapping
+  // 3. Reuse loaded model for small tasks to prevent VRAM swapping
   "small_model": "ollama/qwen38-dev:64kb",
 
+  // 4. Model Providers
   "provider": {
     "ollama": {
       "name": "Ollama Local",
@@ -100,6 +92,7 @@
     }
   },
 
+  // 5. agent
   "agent": {
     "code": {
       "model": "ollama/qwen38-dev:64kb",

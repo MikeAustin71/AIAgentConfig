@@ -1,0 +1,160 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+
+  // 1. External knowledge base reference
+  "references": {
+    "go_knowledge": {
+      "path": "F:/Go_Knowledge",
+      "description": "Central Go 1.27 documentation and release specifications",
+      "hidden": false
+    }
+  },
+
+  // 2. Project rules (AGENTS.md is omitted as Kilo auto-discovers it at root)
+  "instructions": [
+    ".kilo/rules/*.md"
+  ],
+
+  // Default main model
+  "model": "ollama/qwen38-dev:64kb",
+
+  // Reuse loaded model for small tasks to prevent VRAM swapping
+  "small_model": "ollama/qwen38-dev:64kb",
+
+  "provider": {
+    "ollama": {
+      "name": "Ollama Local",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://localhost:11434/v1",
+        "timeout": false
+      },
+      "models": {
+        "gemma4-dev:64kb": {
+          "id": "gemma4-dev:64kb",
+          "name": "Gemma 64kb 4-31",
+          "tool_call": true,
+          "reasoning": true,
+          "limit": {
+            "context": 65536,
+            "output": 16384
+          },
+          "variants": {
+            "none":   { "reasoningEffort": "none" },
+            "low":    { "reasoningEffort": "low" },
+            "medium": { "reasoningEffort": "medium" },
+            "high":   { "reasoningEffort": "high" }
+          }
+        },
+        "gemma4-dev:32kb": {
+          "id": "gemma4-dev:32kb",
+          "name": "Gemma 32kb 4-31",
+          "tool_call": true,
+          "reasoning": true,
+          "limit": {
+            "context": 32768,
+            "output": 16384
+          },
+          "variants": {
+            "none":   { "reasoningEffort": "none" },
+            "low":    { "reasoningEffort": "low" },
+            "medium": { "reasoningEffort": "medium" },
+            "high":   { "reasoningEffort": "high" }
+          }
+        },
+        "qwen38-dev:64kb": {
+          "id": "qwen38-dev:64kb",
+          "name": "Qwen 3.8 27B Dev (64K)",
+          "tool_call": true,
+          "reasoning": true,
+          "limit": {
+            "context": 65536,
+            "output": 16384
+          },
+          "variants": {
+            "none":   { "reasoningEffort": "none" },
+            "low":    { "reasoningEffort": "low" },
+            "medium": { "reasoningEffort": "medium" },
+            "high":   { "reasoningEffort": "high" },
+            "xhigh":  { "reasoningEffort": "xhigh" }
+          }
+        },
+        "qwen38-dev:32kb": {
+          "id": "qwen38-dev:32kb",
+          "name": "Qwen 3.8 27B Dev (32K)",
+          "tool_call": true,
+          "reasoning": true,
+          "limit": {
+            "context": 32768,
+            "output": 16384
+          },
+          "variants": {
+            "none":   { "reasoningEffort": "none" },
+            "low":    { "reasoningEffort": "low" },
+            "medium": { "reasoningEffort": "medium" },
+            "high":   { "reasoningEffort": "high" },
+            "xhigh":  { "reasoningEffort": "xhigh" }
+          }
+        }
+      }
+    }
+  },
+
+  "agent": {
+    "code": {
+      "model": "ollama/qwen38-dev:64kb",
+      "variant": "medium",
+      "temperature": 0.5,
+      "top_p": 0.95,
+      "steps": 30
+    },
+    "plan": {
+      "variant": "medium",
+      "temperature": 0.4,
+      "top_p": 0.95,
+      "steps": 20
+    },
+    "compaction": {
+      // Fast summarization without reasoning overhead
+      "variant": "none",
+      "temperature": 0.2,
+      "top_p": 0.9,
+      "steps": 3
+    }
+  },
+
+  "permission": {
+    // Crucial for allowing tool access to the external knowledge base
+    "external_directory": {
+      "F:/Go_Knowledge/**": "allow",
+      "*": "ask"
+    },
+    "read": {
+      "*": "allow",
+      "F:/Go_Knowledge/**": "allow",
+      "*.env": "ask",
+      "*.env.*": "ask",
+      "*.env.example": "allow",
+      "**/.idea/**": "deny",
+      ".idea/**": "deny"
+    },
+    "edit": "allow",
+    "bash": {
+      "*": "ask",
+      "cd *": "allow",
+      "grep *": "allow",
+      "git status *": "allow",
+      "git diff *": "allow"
+    },
+    "glob": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "todowrite": "allow",
+    "todoread": "allow",
+    "lsp": "allow",
+    "skill": "allow",
+    "webfetch": "ask",
+    "websearch": "ask",
+    "task": "ask"
+  }
+}
